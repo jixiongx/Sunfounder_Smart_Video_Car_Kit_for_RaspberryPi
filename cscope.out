@@ -1,0 +1,6910 @@
+cscope 15 /Users/jixiongxiao/Documents/projects/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi -c 0000042985
+	@./client/cali_client.py
+
+3 from 
+	~Tkinter
+ import *
+
+4 from 
+	~socket
+ import *
+
+5 import 
+	~os
+
+7 
+	=top
+ = 
+	`Tk
+ ( )
+
+8 
+top
+ . 
+	`title
+ ( 'Raspberry Pi Smart Video Car Calibration' )
+
+10 
+	=HOST
+ = '192.168.0.133'
+
+11 
+	=PORT
+ = 21567
+
+12 
+	=BUFSIZ
+ = 1024
+
+13 
+	=ADDR
+ = ( 
+HOST
+ , 
+PORT
+ )
+
+15 
+	=tcpCliSock
+ = 
+	`socket
+ ( 
+AF_INET
+ , 
+SOCK_STREAM
+ )
+
+16 
+tcpCliSock
+ . 
+	`connect
+ ( 
+ADDR
+ )
+
+18 
+	=runbtn
+ = 'Run'
+
+20 
+	=offset
+ = 0
+
+21 
+	=offset_x
+ = 0
+
+22 
+	=offset_y
+ = 0
+
+23 
+	=forward0
+ = 'True'
+
+24 
+	=forward1
+ = 'True'
+
+30 def 
+	$setup
+ ( ) :
+
+31 global 
+	goffset_x
+ , 
+	goffset_y
+ , 
+	goffset
+ , 
+	gforward0
+ , 
+	gforward1
+
+33 
+os
+ . 
+	`system
+ ( 'scp pi@%s:/home/pi/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi/server/config config' % 
+HOST
+ )
+
+39 for 
+line
+ in 
+	`open
+ ( 'config' ) :
+
+40 if 
+line
+ [ 0 : 8 ] == 'offset_x' :
+
+41 
+	=offset_x
+ = 
+	`int
+ ( 
+line
+ [ 11 : - 1 ] )
+
+42 if 
+line
+ [ 0 : 8 ] == 'offset_y' :
+
+43 
+	=offset_y
+ = 
+	`int
+ ( 
+line
+ [ 11 : - 1 ] )
+
+44 if 
+line
+ [ 0 : 8 ] == 'offset =' :
+
+45 
+	=offset
+ = 
+	`int
+ ( 
+line
+ [ 9 : - 1 ] )
+
+46 if 
+line
+ [ 0 : 8 ] == "forward0" :
+
+47 
+	=forward0
+ = 
+line
+ [ 11 : - 1 ]
+
+48 if 
+line
+ [ 0 : 8 ] == "forward1" :
+
+49 
+	=forward1
+ = 
+line
+ [ 11 : - 1 ]
+
+54 
+	=offset_x
+ = 0
+
+55 
+	=offset_y
+ = 0
+
+56 
+	=offset
+ = 0
+
+57 
+	=forward0
+ = True
+
+58 
+	=forward1
+ = True
+
+61 print '\noffset_x =' , 
+offset_x
+
+62 print 'offset_y =' , 
+offset_y
+
+63 print 'Turning offset =' , 
+offset
+
+64 print 'forward0 =' , 
+forward0
+
+65 print 'forward1 =' , 
+forward1
+ 
+	}
+
+74 def 
+	$run
+ ( 
+event
+ ) :
+
+75 global 
+	grunbtn
+
+76 print 'motor ' , 
+runbtn
+
+77 if 
+runbtn
+ == 'Stop' :
+
+78 
+tcpCliSock
+ . 
+	`send
+ ( 'motor_stop' )
+
+79 
+	=runbtn
+ = 'Run'
+
+80 elif 
+runbtn
+ == 'Run' :
+
+81 
+tcpCliSock
+ . 
+	`send
+ ( 'motor_run' )
+
+82 
+	=runbtn
+ = 'Stop' 
+	}
+
+84 def 
+	$confirm
+ ( 
+event
+ ) :
+
+85 global 
+	goffset_x
+ , 
+	goffset_y
+ , 
+	goffset
+ , 
+	gforward0
+ , 
+	gforward1
+
+87 
+	=config
+ = 'offset_x = %s\noffset_y = %s\noffset = %s\nforward0 = %s\nforward1 = %s\n ' % ( 
+offset_x
+ , 
+offset_y
+ , 
+offset
+ , 
+forward0
+ , 
+forward1
+ )
+
+92 print 
+config
+
+95 
+	=fd
+ = 
+	`open
+ ( 'config' , 'w' )
+
+96 
+fd
+ . 
+	`write
+ ( 
+config
+ )
+
+97 
+fd
+ . 
+	`close
+ ( )
+
+100 
+os
+ . 
+	`system
+ ( 'sudo scp config pi@%s:/home/pi/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi/server/config' % 
+HOST
+ )
+
+105 
+top
+ . 
+	`quit
+ ( )
+
+106 
+tcpCliSock
+ . 
+	`send
+ ( 'stop' )
+
+107 
+tcpCliSock
+ . 
+	`close
+ ( ) 
+	}
+
+110 def 
+	$left_reverse
+ ( 
+event
+ ) :
+
+111 global 
+	gforward0
+
+113 if 
+forward0
+ == 'True' :
+
+114 
+	=forward0
+ = 'False'
+
+115 elif 
+forward0
+ == 'False' :
+
+116 
+	=forward0
+ = 'True'
+
+117 
+	=left_cmd
+ = 'leftmotor%s' % 
+forward0
+
+118 
+tcpCliSock
+ . 
+	`send
+ ( 
+left_cmd
+ ) 
+	}
+
+120 def 
+	$right_reverse
+ ( 
+event
+ ) :
+
+121 global 
+	gforward1
+
+123 if 
+forward1
+ == 'True' :
+
+124 
+	=forward1
+ = 'False'
+
+125 elif 
+forward1
+ == 'False' :
+
+126 
+	=forward1
+ = 'True'
+
+127 
+	=right_cmd
+ = 'rightmotor%s' % 
+forward1
+
+128 
+tcpCliSock
+ . 
+	`send
+ ( 
+right_cmd
+ ) 
+	}
+
+132 def 
+	$fineturn_left
+ ( 
+event
+ ) :
+
+133 global 
+	goffset
+
+135 
+	=offset
+ -= 1
+
+136 
+	=cmd
+ = 'offset=%s' % 
+offset
+
+137 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+139 def 
+	$fineturn_right
+ ( 
+event
+ ) :
+
+140 global 
+	goffset
+
+142 
+	=offset
+ += 1
+
+143 
+	=cmd
+ = 'offset=%s' % 
+offset
+
+144 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+146 def 
+	$coarseturn_left
+ ( 
+event
+ ) :
+
+147 global 
+	goffset
+
+149 
+	=offset
+ -= 10
+
+150 
+	=cmd
+ = 'offset=%s' % 
+offset
+
+151 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+153 def 
+	$coarseturn_right
+ ( 
+event
+ ) :
+
+154 global 
+	goffset
+
+156 
+	=offset
+ += 10
+
+157 
+	=cmd
+ = 'offset=%s' % 
+offset
+
+158 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+163 def 
+	$finex_left
+ ( 
+event
+ ) :
+
+164 global 
+	goffset_x
+
+165 
+	=offset_x
+ += 1
+
+166 
+	=cmd
+ = 'offsetx=%s' % 
+offset_x
+
+167 print 
+cmd
+
+168 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+170 def 
+	$finex_right
+ ( 
+event
+ ) :
+
+171 global 
+	goffset_x
+
+172 
+	=offset_x
+ -= 1
+
+173 
+	=cmd
+ = 'offsetx=%s' % 
+offset_x
+
+174 print 
+cmd
+
+175 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+177 def 
+	$coarsex_left
+ ( 
+event
+ ) :
+
+178 global 
+	goffset_x
+
+179 
+	=offset_x
+ += 10
+
+180 
+	=cmd
+ = 'offsetx=%s' % 
+offset_x
+
+181 print 
+cmd
+
+182 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+184 def 
+	$coarsex_right
+ ( 
+event
+ ) :
+
+185 global 
+	goffset_x
+
+186 
+	=offset_x
+ -= 10
+
+187 
+	=cmd
+ = 'offsetx=%s' % 
+offset_x
+
+188 print 
+cmd
+
+189 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+192 def 
+	$finey_down
+ ( 
+event
+ ) :
+
+193 global 
+	goffset_y
+
+195 
+	=offset_y
+ -= 1
+
+196 
+	=cmd
+ = 'offsety=%s' % 
+offset_y
+
+197 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+199 def 
+	$finey_up
+ ( 
+event
+ ) :
+
+200 global 
+	goffset_y
+
+202 
+	=offset_y
+ += 1
+
+203 
+	=cmd
+ = 'offsety=%s' % 
+offset_y
+
+204 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+206 def 
+	$coarsey_down
+ ( 
+event
+ ) :
+
+207 global 
+	goffset_y
+
+209 
+	=offset_y
+ -= 10
+
+210 
+	=cmd
+ = 'offsety=%s' % 
+offset_y
+
+211 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+213 def 
+	$coarsey_up
+ ( 
+event
+ ) :
+
+214 global 
+	goffset_y
+
+216 
+	=offset_y
+ += 10
+
+217 
+	=cmd
+ = 'offsety=%s' % 
+offset_y
+
+218 
+tcpCliSock
+ . 
+	`send
+ ( 
+cmd
+ ) 
+	}
+
+225 def 
+	$quit_fun
+ ( 
+event
+ ) :
+
+226 
+top
+ . 
+	`quit
+ ( )
+
+227 
+tcpCliSock
+ . 
+	`send
+ ( 'stop' )
+
+228 
+tcpCliSock
+ . 
+	`close
+ ( ) 
+	}
+
+233 
+	=Btn0
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Reverse' )
+
+234 
+	=Btn1
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 
+runbtn
+ )
+
+235 
+	=Btn2
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Reverse' )
+
+239 
+	=Btn3
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '<==' )
+
+240 
+	=Btn4
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '==>' )
+
+241 
+	=Btn5
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '<==' )
+
+242 
+	=Btn6
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '==>' )
+
+243 
+	=Btn7
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '<==' )
+
+244 
+	=Btn8
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '==>' )
+
+245 
+	=Btn9
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '<==' )
+
+246 
+	=Btn10
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '==>' )
+
+250 
+	=Btn11
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '<==' )
+
+251 
+	=Btn12
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '==>' )
+
+252 
+	=Btn13
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '<==' )
+
+253 
+	=Btn14
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = '==>' )
+
+257 
+	=Btn15
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Cancel' )
+
+258 
+	=Btn16
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Confirm' )
+
+263 
+Btn0
+ . 
+	`grid
+ ( 
+row
+ = 2 , 
+column
+ = 0 )
+
+264 
+Btn1
+ . 
+	`grid
+ ( 
+row
+ = 2 , 
+column
+ = 1 )
+
+265 
+Btn2
+ . 
+	`grid
+ ( 
+row
+ = 2 , 
+column
+ = 2 )
+
+267 
+Btn3
+ . 
+	`grid
+ ( 
+row
+ = 2 , 
+column
+ = 4 )
+
+268 
+Btn4
+ . 
+	`grid
+ ( 
+row
+ = 2 , 
+column
+ = 6 )
+
+269 
+Btn5
+ . 
+	`grid
+ ( 
+row
+ = 3 , 
+column
+ = 4 )
+
+270 
+Btn6
+ . 
+	`grid
+ ( 
+row
+ = 3 , 
+column
+ = 6 )
+
+271 
+Btn7
+ . 
+	`grid
+ ( 
+row
+ = 5 , 
+column
+ = 4 )
+
+272 
+Btn8
+ . 
+	`grid
+ ( 
+row
+ = 5 , 
+column
+ = 6 )
+
+273 
+Btn9
+ . 
+	`grid
+ ( 
+row
+ = 6 , 
+column
+ = 4 )
+
+274 
+Btn10
+ . 
+	`grid
+ ( 
+row
+ = 6 , 
+column
+ = 6 )
+
+276 
+Btn11
+ . 
+	`grid
+ ( 
+row
+ = 5 , 
+column
+ = 0 )
+
+277 
+Btn12
+ . 
+	`grid
+ ( 
+row
+ = 5 , 
+column
+ = 2 )
+
+278 
+Btn13
+ . 
+	`grid
+ ( 
+row
+ = 6 , 
+column
+ = 0 )
+
+279 
+Btn14
+ . 
+	`grid
+ ( 
+row
+ = 6 , 
+column
+ = 2 )
+
+281 
+Btn15
+ . 
+	`grid
+ ( 
+row
+ = 8 , 
+column
+ = 5 )
+
+282 
+Btn16
+ . 
+	`grid
+ ( 
+row
+ = 8 , 
+column
+ = 6 )
+
+287 
+Btn0
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+left_reverse
+ )
+
+288 
+Btn1
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+run
+ )
+
+289 
+Btn2
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+right_reverse
+ )
+
+291 
+Btn3
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+finex_left
+ )
+
+292 
+Btn4
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+finex_right
+ )
+
+293 
+Btn5
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+coarsex_left
+ )
+
+294 
+Btn6
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+coarsex_right
+ )
+
+295 
+Btn7
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+finey_down
+ )
+
+296 
+Btn8
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+finey_up
+ )
+
+297 
+Btn9
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+coarsey_down
+ )
+
+298 
+Btn10
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+coarsey_up
+ )
+
+300 
+Btn11
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+fineturn_left
+ )
+
+301 
+Btn12
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+fineturn_right
+ )
+
+302 
+Btn13
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+coarseturn_left
+ )
+
+303 
+Btn14
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+coarseturn_right
+ )
+
+305 
+Btn15
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+quit_fun
+ )
+
+306 
+Btn16
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+confirm
+ )
+
+313 
+	=spd
+ = 50
+
+315 
+	=hori
+ = '========='
+
+316 
+	=label0
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '||' , 
+fg
+ = 'red' )
+
+317 
+	=label1
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '||' , 
+fg
+ = 'red' )
+
+318 
+	=label2
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '||' , 
+fg
+ = 'red' )
+
+319 
+	=label3
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '||' , 
+fg
+ = 'red' )
+
+320 
+	=label4
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '||' , 
+fg
+ = 'red' )
+
+321 
+	=label5
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '||' , 
+fg
+ = 'red' )
+
+322 
+	=label6
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '||' , 
+fg
+ = 'red' )
+
+324 
+	=label7
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 
+hori
+ , 
+fg
+ = 'red' )
+
+325 
+	=label8
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 
+hori
+ , 
+fg
+ = 'red' )
+
+326 
+	=label9
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 
+hori
+ , 
+fg
+ = 'red' )
+
+327 
+	=label10
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 
+hori
+ , 
+fg
+ = 'red' )
+
+328 
+	=label11
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 
+hori
+ , 
+fg
+ = 'red' )
+
+329 
+	=label12
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 
+hori
+ , 
+fg
+ = 'red' )
+
+330 
+	=label13
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '||' , 
+fg
+ = 'red' )
+
+331 
+	=label14
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 
+hori
+ , 
+fg
+ = 'red' )
+
+332 
+	=label15
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 
+hori
+ , 
+fg
+ = 'red' )
+
+333 
+	=label16
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 
+hori
+ , 
+fg
+ = 'red' )
+
+335 
+	=label17
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 'Motor' , 
+fg
+ = 'red' )
+
+336 
+	=label18
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 'Left' , 
+fg
+ = 'red' )
+
+338 
+	=label20
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 'Right' , 
+fg
+ = 'red' )
+
+339 
+	=label21
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 'Mount' , 
+fg
+ = 'red' )
+
+340 
+	=label22
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 'Pan:' , 
+fg
+ = 'red' )
+
+342 
+	=label24
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '=== Fine ===' , 
+fg
+ = 'red' )
+
+343 
+	=label25
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '== Coarse ==' , 
+fg
+ = 'red' )
+
+344 
+	=label26
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 'Tilt:' , 
+fg
+ = 'red' )
+
+346 
+	=label28
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '=== Fine ===' , 
+fg
+ = 'red' )
+
+347 
+	=label29
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '== Coarse ==' , 
+fg
+ = 'red' )
+
+348 
+	=label30
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 'Turning' , 
+fg
+ = 'red' )
+
+349 
+	=label31
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '=== Fine ===' , 
+fg
+ = 'red' )
+
+350 
+	=label32
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = '== Coarse ==' , 
+fg
+ = 'red' )
+
+352 
+label0
+ . 
+	`grid
+ ( 
+row
+ = 0 , 
+column
+ = 3 )
+
+353 
+label1
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 3 )
+
+354 
+label2
+ . 
+	`grid
+ ( 
+row
+ = 2 , 
+column
+ = 3 )
+
+355 
+label3
+ . 
+	`grid
+ ( 
+row
+ = 3 , 
+column
+ = 3 )
+
+356 
+label4
+ . 
+	`grid
+ ( 
+row
+ = 4 , 
+column
+ = 3 )
+
+357 
+label5
+ . 
+	`grid
+ ( 
+row
+ = 5 , 
+column
+ = 3 )
+
+358 
+label6
+ . 
+	`grid
+ ( 
+row
+ = 6 , 
+column
+ = 3 )
+
+359 
+label7
+ . 
+	`grid
+ ( 
+row
+ = 3 , 
+column
+ = 0 )
+
+360 
+label8
+ . 
+	`grid
+ ( 
+row
+ = 3 , 
+column
+ = 1 )
+
+361 
+label9
+ . 
+	`grid
+ ( 
+row
+ = 3 , 
+column
+ = 2 )
+
+362 
+label10
+ . 
+	`grid
+ ( 
+row
+ = 7 , 
+column
+ = 0 )
+
+363 
+label11
+ . 
+	`grid
+ ( 
+row
+ = 7 , 
+column
+ = 1 )
+
+364 
+label12
+ . 
+	`grid
+ ( 
+row
+ = 7 , 
+column
+ = 2 )
+
+365 
+label13
+ . 
+	`grid
+ ( 
+row
+ = 7 , 
+column
+ = 3 )
+
+366 
+label14
+ . 
+	`grid
+ ( 
+row
+ = 7 , 
+column
+ = 4 )
+
+367 
+label15
+ . 
+	`grid
+ ( 
+row
+ = 7 , 
+column
+ = 5 )
+
+368 
+label16
+ . 
+	`grid
+ ( 
+row
+ = 7 , 
+column
+ = 6 )
+
+369 
+label17
+ . 
+	`grid
+ ( 
+row
+ = 0 , 
+column
+ = 1 )
+
+370 
+label18
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 0 )
+
+372 
+label20
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 2 )
+
+373 
+label21
+ . 
+	`grid
+ ( 
+row
+ = 0 , 
+column
+ = 5 )
+
+374 
+label22
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 4 )
+
+376 
+label24
+ . 
+	`grid
+ ( 
+row
+ = 2 , 
+column
+ = 5 )
+
+377 
+label25
+ . 
+	`grid
+ ( 
+row
+ = 3 , 
+column
+ = 5 )
+
+378 
+label26
+ . 
+	`grid
+ ( 
+row
+ = 4 , 
+column
+ = 4 )
+
+380 
+label28
+ . 
+	`grid
+ ( 
+row
+ = 5 , 
+column
+ = 5 )
+
+381 
+label29
+ . 
+	`grid
+ ( 
+row
+ = 6 , 
+column
+ = 5 )
+
+382 
+label30
+ . 
+	`grid
+ ( 
+row
+ = 4 , 
+column
+ = 1 )
+
+383 
+label31
+ . 
+	`grid
+ ( 
+row
+ = 5 , 
+column
+ = 1 )
+
+384 
+label32
+ . 
+	`grid
+ ( 
+row
+ = 6 , 
+column
+ = 1 )
+
+386 def 
+	$main
+ ( ) :
+
+387 
+top
+ . 
+	`mainloop
+ ( ) 
+	}
+
+389 if 
+__name__
+ == '__main__' :
+
+390 
+	`setup
+ ( )
+
+391 
+	`main
+ ( )
+
+
+	@./client/client_App.py
+
+3 from 
+	~Tkinter
+ import *
+
+4 from 
+	~socket
+ import *
+
+6 
+	=ctrl_cmd
+ = [ 'forward' , 'backward' , 'left' , 'right' , 'stop' , 'read cpu_temp' , 'home' , 'distance' , 'x+' , 'x-' , 'y+' , 'y-' , 'xy_home' ]
+
+8 
+	=top
+ = 
+	`Tk
+ ( )
+
+9 
+top
+ . 
+	`title
+ ( 'Sunfounder Raspberry Pi Smart Video Car' )
+
+11 
+	=HOST
+ = '192.168.0.133'
+
+12 
+	=PORT
+ = 21567
+
+13 
+	=BUFSIZ
+ = 1024
+
+14 
+	=ADDR
+ = ( 
+HOST
+ , 
+PORT
+ )
+
+16 
+	=tcpCliSock
+ = 
+	`socket
+ ( 
+AF_INET
+ , 
+SOCK_STREAM
+ )
+
+17 
+tcpCliSock
+ . 
+	`connect
+ ( 
+ADDR
+ )
+
+23 def 
+	$forward_fun
+ ( 
+event
+ ) :
+
+25 
+tcpCliSock
+ . 
+	`send
+ ( 'forward' ) 
+	}
+
+27 def 
+	$backward_fun
+ ( 
+event
+ ) :
+
+29 
+tcpCliSock
+ . 
+	`send
+ ( 'backward' ) 
+	}
+
+31 def 
+	$left_fun
+ ( 
+event
+ ) :
+
+33 
+tcpCliSock
+ . 
+	`send
+ ( 'left' ) 
+	}
+
+35 def 
+	$right_fun
+ ( 
+event
+ ) :
+
+37 
+tcpCliSock
+ . 
+	`send
+ ( 'right' ) 
+	}
+
+39 def 
+	$stop_fun
+ ( 
+event
+ ) :
+
+41 
+tcpCliSock
+ . 
+	`send
+ ( 'stop' ) 
+	}
+
+43 def 
+	$home_fun
+ ( 
+event
+ ) :
+
+45 
+tcpCliSock
+ . 
+	`send
+ ( 'home' ) 
+	}
+
+47 def 
+	$dis_fun
+ ( 
+event
+ ) :
+
+49 
+tcpCliSock
+ . 
+	`send
+ ( 'distance' )
+
+50 
+	=data
+ = 
+tcpCliSock
+ . 
+	`recv
+ ( 
+BUFSIZ
+ )
+
+51 print 
+data
+ 
+	}
+
+53 def 
+	$x_increase
+ ( 
+event
+ ) :
+
+55 
+tcpCliSock
+ . 
+	`send
+ ( 'x+' ) 
+	}
+
+57 def 
+	$x_decrease
+ ( 
+event
+ ) :
+
+59 
+tcpCliSock
+ . 
+	`send
+ ( 'x-' ) 
+	}
+
+61 def 
+	$y_increase
+ ( 
+event
+ ) :
+
+63 
+tcpCliSock
+ . 
+	`send
+ ( 'y+' ) 
+	}
+
+65 def 
+	$y_decrease
+ ( 
+event
+ ) :
+
+67 
+tcpCliSock
+ . 
+	`send
+ ( 'y-' ) 
+	}
+
+69 def 
+	$xy_home
+ ( 
+event
+ ) :
+
+71 
+tcpCliSock
+ . 
+	`send
+ ( 'xy_home' ) 
+	}
+
+77 def 
+	$quit_fun
+ ( 
+event
+ ) :
+
+78 
+top
+ . 
+	`quit
+ ( )
+
+79 
+tcpCliSock
+ . 
+	`send
+ ( 'stop' )
+
+80 
+tcpCliSock
+ . 
+	`close
+ ( ) 
+	}
+
+85 
+	=Btn0
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Forward' )
+
+86 
+	=Btn1
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Backward' )
+
+87 
+	=Btn2
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Left' )
+
+88 
+	=Btn3
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Right' )
+
+89 
+	=Btn4
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Quit' )
+
+90 
+	=Btn5
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+height
+ = 2 , 
+text
+ = 'Home' )
+
+91 
+	=Btn6
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Distance' )
+
+96 
+Btn0
+ . 
+	`grid
+ ( 
+row
+ = 0 , 
+column
+ = 1 )
+
+97 
+Btn1
+ . 
+	`grid
+ ( 
+row
+ = 2 , 
+column
+ = 1 )
+
+98 
+Btn2
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 0 )
+
+99 
+Btn3
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 2 )
+
+100 
+Btn4
+ . 
+	`grid
+ ( 
+row
+ = 3 , 
+column
+ = 2 )
+
+101 
+Btn5
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 1 )
+
+102 
+Btn6
+ . 
+	`grid
+ ( 
+row
+ = 3 , 
+column
+ = 0 )
+
+107 
+Btn0
+ . 
+	`bind
+ ( '<ButtonPress-1>' , 
+forward_fun
+ )
+
+108 
+Btn1
+ . 
+	`bind
+ ( '<ButtonPress-1>' , 
+backward_fun
+ )
+
+109 
+Btn2
+ . 
+	`bind
+ ( '<ButtonPress-1>' , 
+left_fun
+ )
+
+110 
+Btn3
+ . 
+	`bind
+ ( '<ButtonPress-1>' , 
+right_fun
+ )
+
+111 
+Btn0
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+stop_fun
+ )
+
+112 
+Btn1
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+stop_fun
+ )
+
+113 
+Btn2
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+stop_fun
+ )
+
+114 
+Btn3
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+stop_fun
+ )
+
+115 
+Btn4
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+quit_fun
+ )
+
+116 
+Btn5
+ . 
+	`bind
+ ( '<ButtonRelease-1>' , 
+home_fun
+ )
+
+122 
+	=Btn07
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'X+' , 
+bg
+ = 'red' )
+
+123 
+	=Btn08
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'X-' , 
+bg
+ = 'red' )
+
+124 
+	=Btn09
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Y-' , 
+bg
+ = 'red' )
+
+125 
+	=Btn10
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+text
+ = 'Y+' , 
+bg
+ = 'red' )
+
+126 
+	=Btn11
+ = 
+	`Button
+ ( 
+top
+ , 
+width
+ = 5 , 
+height
+ = 2 , 
+text
+ = 'HOME' , 
+bg
+ = 'red' )
+
+131 
+Btn07
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 5 )
+
+132 
+Btn08
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 3 )
+
+133 
+Btn09
+ . 
+	`grid
+ ( 
+row
+ = 2 , 
+column
+ = 4 )
+
+134 
+Btn10
+ . 
+	`grid
+ ( 
+row
+ = 0 , 
+column
+ = 4 )
+
+135 
+Btn11
+ . 
+	`grid
+ ( 
+row
+ = 1 , 
+column
+ = 4 )
+
+140 
+Btn07
+ . 
+	`bind
+ ( '<ButtonPress-1>' , 
+x_increase
+ )
+
+141 
+Btn08
+ . 
+	`bind
+ ( '<ButtonPress-1>' , 
+x_decrease
+ )
+
+142 
+Btn09
+ . 
+	`bind
+ ( '<ButtonPress-1>' , 
+y_decrease
+ )
+
+143 
+Btn10
+ . 
+	`bind
+ ( '<ButtonPress-1>' , 
+y_increase
+ )
+
+144 
+Btn11
+ . 
+	`bind
+ ( '<ButtonPress-1>' , 
+xy_home
+ )
+
+155 
+top
+ . 
+	`bind
+ ( '<KeyPress-a>' , 
+left_fun
+ )
+
+156 
+top
+ . 
+	`bind
+ ( '<KeyPress-d>' , 
+right_fun
+ )
+
+157 
+top
+ . 
+	`bind
+ ( '<KeyPress-s>' , 
+backward_fun
+ )
+
+158 
+top
+ . 
+	`bind
+ ( '<KeyPress-w>' , 
+forward_fun
+ )
+
+159 
+top
+ . 
+	`bind
+ ( '<KeyPress-h>' , 
+home_fun
+ )
+
+160 
+top
+ . 
+	`bind
+ ( '<KeyRelease-a>' , 
+home_fun
+ )
+
+161 
+top
+ . 
+	`bind
+ ( '<KeyRelease-d>' , 
+home_fun
+ )
+
+162 
+top
+ . 
+	`bind
+ ( '<KeyRelease-s>' , 
+stop_fun
+ )
+
+163 
+top
+ . 
+	`bind
+ ( '<KeyRelease-w>' , 
+stop_fun
+ )
+
+165 
+	=spd
+ = 50
+
+167 def 
+	$changeSpeed
+ ( 
+ev
+ = None ) :
+
+168 
+	=tmp
+ = 'speed'
+
+169 global 
+	gspd
+
+170 
+	=spd
+ = 
+speed
+ . 
+	`get
+ ( )
+
+171 
+	=data
+ = 
+tmp
+ + 
+	`str
+ ( 
+spd
+ )
+
+172 print 'sendData = %s' % 
+data
+
+173 
+tcpCliSock
+ . 
+	`send
+ ( 
+data
+ ) 
+	}
+
+175 
+	=label
+ = 
+	`Label
+ ( 
+top
+ , 
+text
+ = 'Speed:' , 
+fg
+ = 'red' )
+
+176 
+label
+ . 
+	`grid
+ ( 
+row
+ = 6 , 
+column
+ = 0 )
+
+178 
+	=speed
+ = 
+	`Scale
+ ( 
+top
+ , 
+from_
+ = 0 , 
+to
+ = 100 , 
+orient
+ = 
+HORIZONTAL
+ , 
+command
+ = 
+changeSpeed
+ )
+
+179 
+speed
+ . 
+	`set
+ ( 50 )
+
+180 
+speed
+ . 
+	`grid
+ ( 
+row
+ = 6 , 
+column
+ = 1 )
+
+182 def 
+	$main
+ ( ) :
+
+183 
+top
+ . 
+	`mainloop
+ ( ) 
+	}
+
+185 if 
+__name__
+ == '__main__' :
+
+186 
+	`main
+ ( )
+
+
+	@./server/cali_server.py
+
+2 import 
+	~RPi.GPIO
+ as 
+GPIO
+
+3 import 
+	~video_dir
+
+4 import 
+	~car_dir
+
+5 import 
+	~motor
+
+6 from 
+	~socket
+ import *
+
+7 from 
+	~time
+ import 
+ctime
+
+9 
+	=HOST
+ = ''
+
+10 
+	=PORT
+ = 21567
+
+11 
+	=BUFSIZ
+ = 1024
+
+12 
+	=ADDR
+ = ( 
+HOST
+ , 
+PORT
+ )
+
+14 
+	=tcpSerSock
+ = 
+	`socket
+ ( 
+AF_INET
+ , 
+SOCK_STREAM
+ )
+
+15 
+tcpSerSock
+ . 
+	`bind
+ ( 
+ADDR
+ )
+
+16 
+tcpSerSock
+ . 
+	`listen
+ ( 5 )
+
+19 def 
+	$setup
+ ( ) :
+
+20 global 
+	goffset_x
+ , 
+	goffset_y
+ , 
+	goffset
+ , 
+	gforward0
+ , 
+	gforward1
+
+21 
+	=offset_x
+ = 0
+
+22 
+	=offset_y
+ = 0
+
+23 
+	=offset
+ = 0
+
+24 
+	=forward0
+ = 'True'
+
+25 
+	=forward1
+ = 'False'
+
+27 for 
+line
+ in 
+	`open
+ ( 'config' ) :
+
+28 if 
+line
+ [ 0 : 8 ] == 'offset_x' :
+
+29 
+	=offset_x
+ = 
+	`int
+ ( 
+line
+ [ 11 : - 1 ] )
+
+30 print 'offset_x =' , 
+offset_x
+
+31 if 
+line
+ [ 0 : 8 ] == 'offset_y' :
+
+32 
+	=offset_y
+ = 
+	`int
+ ( 
+line
+ [ 11 : - 1 ] )
+
+33 print 'offset_y =' , 
+offset_y
+
+34 if 
+line
+ [ 0 : 8 ] == 'offset =' :
+
+35 
+	=offset
+ = 
+	`int
+ ( 
+line
+ [ 9 : - 1 ] )
+
+36 print 'offset =' , 
+offset
+
+37 if 
+line
+ [ 0 : 8 ] == "forward0" :
+
+38 
+	=forward0
+ = 
+line
+ [ 11 : - 1 ]
+
+39 print 'turning0 =' , 
+forward0
+
+40 if 
+line
+ [ 0 : 8 ] == "forward1" :
+
+41 
+	=forward1
+ = 
+line
+ [ 11 : - 1 ]
+
+42 print 'turning1 =' , 
+forward1
+
+45 
+video_dir
+ . 
+	`setup
+ ( )
+
+46 
+car_dir
+ . 
+	`setup
+ ( )
+
+47 
+motor
+ . 
+	`setup
+ ( )
+
+48 
+video_dir
+ . 
+	`calibrate
+ ( 
+offset_x
+ , 
+offset_y
+ )
+
+49 
+car_dir
+ . 
+	`calibrate
+ ( 
+offset
+ ) 
+	}
+
+51 def 
+	$REVERSE
+ ( 
+x
+ ) :
+
+52 if 
+x
+ == 'True' :
+
+54 elif 
+x
+ == 'False' :
+
+55 return 'True' 
+	}
+
+57 def 
+	$loop
+ ( ) :
+
+58 global 
+	goffset_x
+ , 
+	goffset_y
+ , 
+	goffset
+ , 
+	gforward0
+ , 
+	gforward1
+
+64 
+	=tcpCliSock
+ , 
+	=addr
+ = 
+tcpSerSock
+ . 
+	`accept
+ ( )
+
+65 print '...connected from :' , 
+addr
+
+68 
+	=data
+ = 
+tcpCliSock
+ . 
+	`recv
+ ( 
+BUFSIZ
+ )
+
+70 if not 
+data
+ :
+
+73 if 
+data
+ == 'motor_run' :
+
+75 
+motor
+ . 
+	`setSpeed
+ ( 50 )
+
+76 
+motor
+ . 
+	`motor0
+ ( 
+forward0
+ )
+
+77 
+motor
+ . 
+	`motor1
+ ( 
+forward1
+ )
+
+78 elif 
+data
+ [ 0 : 9 ] == 'leftmotor' :
+
+79 
+	=forward0
+ = 
+data
+ [ 9 : ]
+
+80 
+motor
+ . 
+	`motor0
+ ( 
+forward0
+ )
+
+81 elif 
+data
+ [ 0 : 10 ] == 'rightmotor' :
+
+82 
+	=forward1
+ = 
+data
+ [ 10 : ]
+
+83 
+motor
+ . 
+	`motor1
+ ( 
+forward1
+ )
+
+84 elif 
+data
+ == 'motor_stop' :
+
+86 
+motor
+ . 
+	`stop
+ ( )
+
+90 elif 
+data
+ [ 0 : 7 ] == 'offset=' :
+
+91 
+	=offset
+ = 
+	`int
+ ( 
+data
+ [ 7 : ] )
+
+92 
+car_dir
+ . 
+	`calibrate
+ ( 
+offset
+ )
+
+96 elif 
+data
+ [ 0 : 8 ] == 'offsetx=' :
+
+97 
+	=offset_x
+ = 
+	`int
+ ( 
+data
+ [ 8 : ] )
+
+98 print 'Mount offset x' , 
+offset_x
+
+99 
+video_dir
+ . 
+	`calibrate
+ ( 
+offset_x
+ , 
+offset_y
+ )
+
+100 elif 
+data
+ [ 0 : 8 ] == 'offsety=' :
+
+101 
+	=offset_y
+ = 
+	`int
+ ( 
+data
+ [ 8 : ] )
+
+102 print 'Mount offset y' , 
+offset_y
+
+103 
+video_dir
+ . 
+	`calibrate
+ ( 
+offset_x
+ , 
+offset_y
+ )
+
+107 print 'cmd error !' 
+	}
+
+109 if 
+__name__
+ == "__main__" :
+
+111 
+	`setup
+ ( )
+
+112 
+	`loop
+ ( )
+
+113 except 
+KeyboardInterrupt
+ :
+
+114 
+tcpSerSock
+ . 
+	`close
+ ( )
+
+
+	@./server/car_dir.py
+
+2 import 
+	~Sunfounder_PWM_Servo_Driver.Servo_init
+ as 
+servo
+
+3 import 
+	~time
+
+5 def 
+	$setup
+ ( ) :
+
+6 global 
+	gleftPWM
+ , 
+	grightPWM
+ , 
+	ghomePWM
+ , 
+	gpwm
+
+7 
+	=leftPWM
+ = 375
+
+8 
+	=homePWM
+ = 450
+
+9 
+	=rightPWM
+ = 575
+
+10 
+	=offset
+ = 0
+
+12 for 
+line
+ in 
+	`open
+ ( 'config' ) :
+
+13 if 
+line
+ [ 0 : 8 ] == 'offset =' :
+
+14 
+	=offset
+ = 
+	`int
+ ( 
+line
+ [ 9 : - 1 ] )
+
+17 
+	=leftPWM
+ += 
+offset
+
+18 
+	=homePWM
+ += 
+offset
+
+19 
+	=rightPWM
+ += 
+offset
+
+20 
+	=pwm
+ = 
+servo
+ . 
+	`init
+ ( ) 
+	}
+
+26 def 
+	$turn_left
+ ( ) :
+
+27 global 
+	gleftPWM
+
+28 
+pwm
+ . 
+	`setPWM
+ ( 0 , 0 , 
+leftPWM
+ ) 
+	}
+
+33 def 
+	$turn_right
+ ( ) :
+
+34 global 
+	grightPWM
+
+35 
+pwm
+ . 
+	`setPWM
+ ( 0 , 0 , 
+rightPWM
+ ) 
+	}
+
+40 def 
+	$home
+ ( ) :
+
+41 global 
+	ghomePWM
+
+42 
+pwm
+ . 
+	`setPWM
+ ( 0 , 0 , 
+homePWM
+ ) 
+	}
+
+44 def 
+	$calibrate
+ ( 
+x
+ ) :
+
+45 
+pwm
+ . 
+	`setPWM
+ ( 0 , 0 , 450 + 
+x
+ ) 
+	}
+
+47 def 
+	$test
+ ( ) :
+
+49 
+	`turn_left
+ ( )
+
+50 
+time
+ . 
+	`sleep
+ ( 1 )
+
+51 
+	`home
+ ( )
+
+52 
+time
+ . 
+	`sleep
+ ( 1 )
+
+53 
+	`turn_right
+ ( )
+
+54 
+time
+ . 
+	`sleep
+ ( 1 )
+
+55 
+	`home
+ ( ) 
+	}
+
+57 if 
+__name__
+ == '__main__' :
+
+58 
+	`setup
+ ( )
+
+59 
+	`home
+ ( )
+
+
+	@./server/motor.py
+
+2 import 
+	~RPi.GPIO
+ as 
+GPIO
+
+3 import 
+	~Sunfounder_PWM_Servo_Driver.Servo_init
+ as 
+pwm
+
+4 import 
+	~time
+
+10 
+	=Motor0_A
+ = 11
+
+11 
+	=Motor0_B
+ = 12
+
+12 
+	=Motor1_A
+ = 13
+
+13 
+	=Motor1_B
+ = 15
+
+19 
+	=EN_M0
+ = 4
+
+20 
+	=EN_M1
+ = 5
+
+22 
+	=pins
+ = [ 
+Motor0_A
+ , 
+Motor0_B
+ , 
+Motor1_A
+ , 
+Motor1_B
+ ]
+
+24 
+	=p
+ = 
+pwm
+ . 
+	`init
+ ( )
+
+30 def 
+	$setSpeed
+ ( 
+speed
+ ) :
+
+31 
+	=speed
+ *= 40
+
+32 
+p
+ . 
+	`setPWM
+ ( 
+EN_M0
+ , 0 , 
+speed
+ )
+
+33 
+p
+ . 
+	`setPWM
+ ( 
+EN_M1
+ , 0 , 
+speed
+ ) 
+	}
+
+35 def 
+	$setup
+ ( ) :
+
+36 global 
+	gforward0
+ , 
+	gforward1
+ , 
+	gbackward1
+ , 
+	gbackward0
+
+37 
+	=forward0
+ = 'True'
+
+38 
+	=forward1
+ = 'True'
+
+39 
+GPIO
+ . 
+	`setwarnings
+ ( False )
+
+40 
+GPIO
+ . 
+	`setmode
+ ( 
+GPIO
+ . 
+BOARD
+ )
+
+42 for 
+line
+ in 
+	`open
+ ( "config" ) :
+
+43 if 
+line
+ [ 0 : 8 ] == "forward0" :
+
+44 
+	=forward0
+ = 
+line
+ [ 11 : - 1 ]
+
+45 if 
+line
+ [ 0 : 8 ] == "forward1" :
+
+46 
+	=forward1
+ = 
+line
+ [ 11 : - 1 ]
+
+49 if 
+forward0
+ == 'True' :
+
+50 
+	=backward0
+ = 'False'
+
+51 elif 
+forward0
+ == 'False' :
+
+52 
+	=backward0
+ = 'True'
+
+53 if 
+forward1
+ == 'True' :
+
+54 
+	=backward1
+ = 'False'
+
+55 elif 
+forward1
+ == 'False' :
+
+56 
+	=backward1
+ = 'True'
+
+57 for 
+pin
+ in 
+pins
+ :
+
+58 
+GPIO
+ . 
+	`setup
+ ( 
+pin
+ , 
+GPIO
+ . 
+OUT
+ ) 
+	}
+
+65 def 
+	$motor0
+ ( 
+x
+ ) :
+
+66 if 
+x
+ == 'True' :
+
+67 
+GPIO
+ . 
+	`output
+ ( 
+Motor0_A
+ , 
+GPIO
+ . 
+LOW
+ )
+
+68 
+GPIO
+ . 
+	`output
+ ( 
+Motor0_B
+ , 
+GPIO
+ . 
+HIGH
+ )
+
+69 elif 
+x
+ == 'False' :
+
+70 
+GPIO
+ . 
+	`output
+ ( 
+Motor0_A
+ , 
+GPIO
+ . 
+HIGH
+ )
+
+71 
+GPIO
+ . 
+	`output
+ ( 
+Motor0_B
+ , 
+GPIO
+ . 
+LOW
+ )
+
+73 print 'Config Error' 
+	}
+
+75 def 
+	$motor1
+ ( 
+x
+ ) :
+
+76 if 
+x
+ == 'True' :
+
+77 
+GPIO
+ . 
+	`output
+ ( 
+Motor1_A
+ , 
+GPIO
+ . 
+LOW
+ )
+
+78 
+GPIO
+ . 
+	`output
+ ( 
+Motor1_B
+ , 
+GPIO
+ . 
+HIGH
+ )
+
+79 elif 
+x
+ == 'False' :
+
+80 
+GPIO
+ . 
+	`output
+ ( 
+Motor1_A
+ , 
+GPIO
+ . 
+HIGH
+ )
+
+81 
+GPIO
+ . 
+	`output
+ ( 
+Motor1_B
+ , 
+GPIO
+ . 
+LOW
+ ) 
+	}
+
+83 def 
+	$forward
+ ( ) :
+
+84 
+	`motor0
+ ( 
+forward0
+ )
+
+85 
+	`motor1
+ ( 
+forward1
+ ) 
+	}
+
+87 def 
+	$backward
+ ( ) :
+
+88 
+	`motor0
+ ( 
+backward0
+ )
+
+89 
+	`motor1
+ ( 
+backward1
+ ) 
+	}
+
+91 def 
+	$stop
+ ( ) :
+
+92 for 
+pin
+ in 
+pins
+ :
+
+93 
+GPIO
+ . 
+	`output
+ ( 
+pin
+ , 
+GPIO
+ . 
+LOW
+ ) 
+	}
+
+100 def 
+	$ctrl
+ ( 
+status
+ , 
+direction
+ = 1 ) :
+
+101 if 
+status
+ == 1 :
+
+102 if 
+direction
+ == 1 :
+
+103 
+	`forward
+ ( )
+
+104 elif 
+direction
+ == - 1 :
+
+105 
+	`backward
+ ( )
+
+108 elif 
+status
+ == 0 :
+
+109 
+	`stop
+ ( )
+
+111 print 'Argument error! status must be 0 or 1.' 
+	}
+
+113 def 
+	$test
+ ( ) :
+
+115 
+	`setup
+ ( )
+
+116 
+	`ctrl
+ ( 1 )
+
+117 
+time
+ . 
+	`sleep
+ ( 3 )
+
+118 
+	`setSpeed
+ ( 10 )
+
+119 
+time
+ . 
+	`sleep
+ ( 3 )
+
+120 
+	`setSpeed
+ ( 100 )
+
+121 
+time
+ . 
+	`sleep
+ ( 3 )
+
+122 
+	`ctrl
+ ( 0 ) 
+	}
+
+124 if 
+__name__
+ == '__main__' :
+
+125 
+	`setup
+ ( )
+
+126 
+	`setSpeed
+ ( 50 )
+
+129 
+	`stop
+ ( )
+
+
+	@./server/Sunfounder_I2C/__init__.py
+
+
+	@./server/Sunfounder_I2C/Sunfounder_I2C.py
+
+3 import 
+	~smbus
+
+5 class 
+	cSunfounder_I2C
+ ( 
+object
+ ) :
+
+7 @ 
+	`staticmethod
+
+8 def 
+	$getPiRevision
+ ( ) :
+
+14 with 
+	`open
+ ( '/proc/cpuinfo' , 'r' ) as 
+f
+ :
+
+15 for 
+line
+ in 
+f
+ :
+
+16 if 
+line
+ . 
+	`startswith
+ ( 'Revision' ) :
+
+17 return 1 if 
+line
+ . 
+	`rstrip
+ ( ) [ - 1 ] in [ '2' , '3' ] else 2
+
+19 return 0 
+	}
+
+21 @ 
+	`staticmethod
+
+22 def 
+	$getPiI2CBusNumber
+ ( ) :
+
+24 return 1 if 
+Sunfounder_I2C
+ . 
+	`getPiRevision
+ ( ) > 1 else 0 
+	}
+
+26 def 
+	$__init__
+ ( 
+self
+ , 
+address
+ , 
+busnum
+ = - 1 , 
+debug
+ = False ) :
+
+27 
+self
+ . 
+	=address
+ = 
+address
+
+32 
+self
+ . 
+	=bus
+ = 
+smbus
+ . 
+	`SMBus
+ ( 
+busnum
+ if 
+busnum
+ >= 0 else 
+Sunfounder_I2C
+ . 
+	`getPiI2CBusNumber
+ ( ) )
+
+33 
+self
+ . 
+	=debug
+ = 
+debug
+ 
+	}
+
+35 def 
+	$reverseByteOrder
+ ( 
+self
+ , 
+data
+ ) :
+
+38 
+	=byteCount
+ = 
+	`len
+ ( 
+	`hex
+ ( 
+data
+ ) [ 2 : ] . 
+	`replace
+ ( 'L' , '' ) [ : : 2 ] )
+
+39 
+	=val
+ = 0
+
+40 for 
+i
+ in 
+	`range
+ ( 
+byteCount
+ ) :
+
+41 
+	=val
+ = ( 
+val
+ << 8 ) | ( 
+data
+ & 0xff )
+
+42 
+	=data
+ >>= 8
+
+43 return 
+val
+ 
+	}
+
+45 def 
+	$errMsg
+ ( 
+self
+ ) :
+
+46 print "Error accessing 0x%02X: Check your I2C address" % 
+self
+ . 
+address
+
+47 return - 1 
+	}
+
+49 def 
+	$write8
+ ( 
+self
+ , 
+reg
+ , 
+value
+ ) :
+
+52 
+self
+ . 
+bus
+ . 
+	`write_byte_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ , 
+value
+ )
+
+53 if 
+self
+ . 
+debug
+ :
+
+54 print "I2C: Wrote 0x%02X to register 0x%02X" % ( 
+value
+ , 
+reg
+ )
+
+55 except 
+IOError
+ , 
+err
+ :
+
+56 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+58 def 
+	$write16
+ ( 
+self
+ , 
+reg
+ , 
+value
+ ) :
+
+61 
+self
+ . 
+bus
+ . 
+	`write_word_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ , 
+value
+ )
+
+62 if 
+self
+ . 
+debug
+ :
+
+64 ( 
+value
+ , 
+reg
+ , 
+reg
+ + 1 ) )
+
+65 except 
+IOError
+ , 
+err
+ :
+
+66 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+68 def 
+	$writeRaw8
+ ( 
+self
+ , 
+value
+ ) :
+
+71 
+self
+ . 
+bus
+ . 
+	`write_byte
+ ( 
+self
+ . 
+address
+ , 
+value
+ )
+
+72 if 
+self
+ . 
+debug
+ :
+
+73 print "I2C: Wrote 0x%02X" % 
+value
+
+74 except 
+IOError
+ , 
+err
+ :
+
+75 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+77 def 
+	$writeList
+ ( 
+self
+ , 
+reg
+ , 
+list
+ ) :
+
+80 if 
+self
+ . 
+debug
+ :
+
+81 print "I2C: Writing list to register 0x%02X:" % 
+reg
+
+82 print 
+list
+
+83 
+self
+ . 
+bus
+ . 
+	`write_i2c_block_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ , 
+list
+ )
+
+84 except 
+IOError
+ , 
+err
+ :
+
+85 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+87 def 
+	$readList
+ ( 
+self
+ , 
+reg
+ , 
+length
+ ) :
+
+90 
+	=results
+ = 
+self
+ . 
+bus
+ . 
+	`read_i2c_block_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ , 
+length
+ )
+
+91 if 
+self
+ . 
+debug
+ :
+
+93 ( 
+self
+ . 
+address
+ , 
+reg
+ ) )
+
+94 print 
+results
+
+95 return 
+results
+
+96 except 
+IOError
+ , 
+err
+ :
+
+97 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+99 def 
+	$readU8
+ ( 
+self
+ , 
+reg
+ ) :
+
+102 
+	=result
+ = 
+self
+ . 
+bus
+ . 
+	`read_byte_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ )
+
+103 if 
+self
+ . 
+debug
+ :
+
+105 ( 
+self
+ . 
+address
+ , 
+result
+ & 0xFF , 
+reg
+ ) )
+
+106 return 
+result
+
+107 except 
+IOError
+ , 
+err
+ :
+
+108 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+110 def 
+	$readS8
+ ( 
+self
+ , 
+reg
+ ) :
+
+113 
+	=result
+ = 
+self
+ . 
+bus
+ . 
+	`read_byte_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ )
+
+114 if 
+result
+ > 127 : 
+	=result
+ -= 256
+
+115 if 
+self
+ . 
+debug
+ :
+
+117 ( 
+self
+ . 
+address
+ , 
+result
+ & 0xFF , 
+reg
+ ) )
+
+118 return 
+result
+
+119 except 
+IOError
+ , 
+err
+ :
+
+120 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+122 def 
+	$readU16
+ ( 
+self
+ , 
+reg
+ , 
+little_endian
+ = True ) :
+
+125 
+	=result
+ = 
+self
+ . 
+bus
+ . 
+	`read_word_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ )
+
+128 if not 
+little_endian
+ :
+
+129 
+	=result
+ = ( ( 
+result
+ << 8 ) & 0xFF00 ) + ( 
+result
+ >> 8 )
+
+130 if ( 
+self
+ . 
+debug
+ ) :
+
+131 print "I2C: Device 0x%02X returned 0x%04X from reg 0x%02X" % ( 
+self
+ . 
+address
+ , 
+result
+ & 0xFFFF , 
+reg
+ )
+
+132 return 
+result
+
+133 except 
+IOError
+ , 
+err
+ :
+
+134 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+136 def 
+	$readS16
+ ( 
+self
+ , 
+reg
+ , 
+little_endian
+ = True ) :
+
+139 
+	=result
+ = 
+self
+ . 
+	`readU16
+ ( 
+reg
+ , 
+little_endian
+ )
+
+140 if 
+result
+ > 32767 : 
+	=result
+ -= 65536
+
+141 return 
+result
+
+142 except 
+IOError
+ , 
+err
+ :
+
+143 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+145 if 
+__name__
+ == '__main__' :
+
+147 
+	=bus
+ = 
+	`Sunfounder_I2C
+ ( 
+address
+ = 0 )
+
+
+	@./server/Sunfounder_PWM_Servo_Driver/__init__.py
+
+
+	@./server/Sunfounder_PWM_Servo_Driver/Servo_Example.py
+
+2 from 
+	~Sunfounder_PWM_Servo_Driver
+ import 
+PWM
+
+3 import 
+	~time
+
+12 
+	=pwm
+ = 
+	`PWM
+ ( 0x40 , 
+debug
+ = True )
+
+14 
+	=servoMin
+ = 150
+
+15 
+	=servoMax
+ = 600
+
+17 def 
+	$setServoPulse
+ ( 
+channel
+ , 
+pulse
+ ) :
+
+18 
+	=pulseLength
+ = 1000000
+
+19 
+	=pulseLength
+ /= 60
+
+20 print "%d us per period" % 
+pulseLength
+
+21 
+	=pulseLength
+ /= 4096
+
+22 print "%d us per bit" % 
+pulseLength
+
+23 
+	=pulse
+ *= 1000
+
+24 
+	=pulse
+ /= 
+pulseLength
+
+25 
+pwm
+ . 
+	`setPWM
+ ( 
+channel
+ , 0 , 
+pulse
+ ) 
+	}
+
+27 
+pwm
+ . 
+	`setPWMFreq
+ ( 60 )
+
+30 
+pwm
+ . 
+	`setPWM
+ ( 3 , 0 , 375 )
+
+31 
+time
+ . 
+	`sleep
+ ( 1 )
+
+32 
+pwm
+ . 
+	`setPWM
+ ( 3 , 0 , 450 )
+
+33 
+time
+ . 
+	`sleep
+ ( 1 )
+
+34 
+pwm
+ . 
+	`setPWM
+ ( 3 , 0 , 525 )
+
+35 
+time
+ . 
+	`sleep
+ ( 1 )
+
+36 
+pwm
+ . 
+	`setPWM
+ ( 3 , 0 , 450 )
+
+37 
+time
+ . 
+	`sleep
+ ( 1 ) '''	pwm.setPWM(0, 0, servoMin)\n	time.sleep(1)\n	pwm.setPWM(0, 0, servoMax)\n	time.sleep(1)\n'''
+
+
+	@./server/Sunfounder_PWM_Servo_Driver/Servo_init.py
+
+2 from 
+	~Sunfounder_PWM_Servo_Driver
+ import 
+PWM
+
+3 import 
+	~time
+
+5 def 
+	$setServoPulse
+ ( 
+channel
+ , 
+pulse
+ ) :
+
+6 
+	=pulseLength
+ = 1000000
+
+7 
+	=pulseLength
+ /= 60
+
+8 print "%d us per period" % 
+pulseLength
+
+9 
+	=pulseLength
+ /= 4096
+
+10 print "%d us per bit" % 
+pulseLength
+
+11 
+	=pulse
+ *= 1000
+
+12 
+	=pulse
+ /= 
+pulseLength
+
+13 
+pwm
+ . 
+	`setPWM
+ ( 
+channel
+ , 0 , 
+pulse
+ ) 
+	}
+
+15 def 
+	$init
+ ( ) :
+
+18 
+	=pwm
+ = 
+	`PWM
+ ( 0x40 )
+
+20 
+pwm
+ . 
+	`setPWMFreq
+ ( 60 )
+
+22 return 
+pwm
+ 
+	}
+
+25 if 
+__name__
+ == '__main__' :
+
+26 
+	=pwm_smp
+ = 
+	`init
+ ( )
+
+28 
+pwm_smp
+ . 
+	`setPWM
+ ( 0 , 0 , 375 )
+
+29 
+time
+ . 
+	`sleep
+ ( 1 )
+
+30 
+pwm_smp
+ . 
+	`setPWM
+ ( 0 , 0 , 450 )
+
+31 
+time
+ . 
+	`sleep
+ ( 1 )
+
+32 
+pwm_smp
+ . 
+	`setPWM
+ ( 0 , 0 , 525 )
+
+33 
+time
+ . 
+	`sleep
+ ( 1 )
+
+34 
+pwm_smp
+ . 
+	`setPWM
+ ( 0 , 0 , 450 )
+
+35 
+time
+ . 
+	`sleep
+ ( 1 )
+
+
+	@./server/Sunfounder_PWM_Servo_Driver/Sunfounder_I2C.py
+
+3 import 
+	~smbus
+
+5 class 
+	cSunfounder_I2C
+ ( 
+object
+ ) :
+
+7 @ 
+	`staticmethod
+
+8 def 
+	$getPiRevision
+ ( ) :
+
+14 with 
+	`open
+ ( '/proc/cpuinfo' , 'r' ) as 
+f
+ :
+
+15 for 
+line
+ in 
+f
+ :
+
+16 if 
+line
+ . 
+	`startswith
+ ( 'Revision' ) :
+
+17 return 1 if 
+line
+ . 
+	`rstrip
+ ( ) [ - 1 ] in [ '2' , '3' ] else 2
+
+19 return 0 
+	}
+
+21 @ 
+	`staticmethod
+
+22 def 
+	$getPiI2CBusNumber
+ ( ) :
+
+24 return 1 if 
+Sunfounder_I2C
+ . 
+	`getPiRevision
+ ( ) > 1 else 0 
+	}
+
+26 def 
+	$__init__
+ ( 
+self
+ , 
+address
+ , 
+busnum
+ = - 1 , 
+debug
+ = False ) :
+
+27 
+self
+ . 
+	=address
+ = 
+address
+
+32 
+self
+ . 
+	=bus
+ = 
+smbus
+ . 
+	`SMBus
+ ( 
+busnum
+ if 
+busnum
+ >= 0 else 
+Sunfounder_I2C
+ . 
+	`getPiI2CBusNumber
+ ( ) )
+
+33 
+self
+ . 
+	=debug
+ = 
+debug
+ 
+	}
+
+35 def 
+	$reverseByteOrder
+ ( 
+self
+ , 
+data
+ ) :
+
+38 
+	=byteCount
+ = 
+	`len
+ ( 
+	`hex
+ ( 
+data
+ ) [ 2 : ] . 
+	`replace
+ ( 'L' , '' ) [ : : 2 ] )
+
+39 
+	=val
+ = 0
+
+40 for 
+i
+ in 
+	`range
+ ( 
+byteCount
+ ) :
+
+41 
+	=val
+ = ( 
+val
+ << 8 ) | ( 
+data
+ & 0xff )
+
+42 
+	=data
+ >>= 8
+
+43 return 
+val
+ 
+	}
+
+45 def 
+	$errMsg
+ ( 
+self
+ ) :
+
+46 print "Error accessing 0x%02X: Check your I2C address" % 
+self
+ . 
+address
+
+47 return - 1 
+	}
+
+49 def 
+	$write8
+ ( 
+self
+ , 
+reg
+ , 
+value
+ ) :
+
+52 
+self
+ . 
+bus
+ . 
+	`write_byte_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ , 
+value
+ )
+
+53 if 
+self
+ . 
+debug
+ :
+
+54 print "I2C: Wrote 0x%02X to register 0x%02X" % ( 
+value
+ , 
+reg
+ )
+
+55 except 
+IOError
+ , 
+err
+ :
+
+56 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+58 def 
+	$write16
+ ( 
+self
+ , 
+reg
+ , 
+value
+ ) :
+
+61 
+self
+ . 
+bus
+ . 
+	`write_word_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ , 
+value
+ )
+
+62 if 
+self
+ . 
+debug
+ :
+
+64 ( 
+value
+ , 
+reg
+ , 
+reg
+ + 1 ) )
+
+65 except 
+IOError
+ , 
+err
+ :
+
+66 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+68 def 
+	$writeRaw8
+ ( 
+self
+ , 
+value
+ ) :
+
+71 
+self
+ . 
+bus
+ . 
+	`write_byte
+ ( 
+self
+ . 
+address
+ , 
+value
+ )
+
+72 if 
+self
+ . 
+debug
+ :
+
+73 print "I2C: Wrote 0x%02X" % 
+value
+
+74 except 
+IOError
+ , 
+err
+ :
+
+75 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+77 def 
+	$writeList
+ ( 
+self
+ , 
+reg
+ , 
+list
+ ) :
+
+80 if 
+self
+ . 
+debug
+ :
+
+81 print "I2C: Writing list to register 0x%02X:" % 
+reg
+
+82 print 
+list
+
+83 
+self
+ . 
+bus
+ . 
+	`write_i2c_block_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ , 
+list
+ )
+
+84 except 
+IOError
+ , 
+err
+ :
+
+85 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+87 def 
+	$readList
+ ( 
+self
+ , 
+reg
+ , 
+length
+ ) :
+
+90 
+	=results
+ = 
+self
+ . 
+bus
+ . 
+	`read_i2c_block_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ , 
+length
+ )
+
+91 if 
+self
+ . 
+debug
+ :
+
+93 ( 
+self
+ . 
+address
+ , 
+reg
+ ) )
+
+94 print 
+results
+
+95 return 
+results
+
+96 except 
+IOError
+ , 
+err
+ :
+
+97 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+99 def 
+	$readU8
+ ( 
+self
+ , 
+reg
+ ) :
+
+102 
+	=result
+ = 
+self
+ . 
+bus
+ . 
+	`read_byte_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ )
+
+103 if 
+self
+ . 
+debug
+ :
+
+105 ( 
+self
+ . 
+address
+ , 
+result
+ & 0xFF , 
+reg
+ ) )
+
+106 return 
+result
+
+107 except 
+IOError
+ , 
+err
+ :
+
+108 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+110 def 
+	$readS8
+ ( 
+self
+ , 
+reg
+ ) :
+
+113 
+	=result
+ = 
+self
+ . 
+bus
+ . 
+	`read_byte_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ )
+
+114 if 
+result
+ > 127 : 
+	=result
+ -= 256
+
+115 if 
+self
+ . 
+debug
+ :
+
+117 ( 
+self
+ . 
+address
+ , 
+result
+ & 0xFF , 
+reg
+ ) )
+
+118 return 
+result
+
+119 except 
+IOError
+ , 
+err
+ :
+
+120 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+122 def 
+	$readU16
+ ( 
+self
+ , 
+reg
+ , 
+little_endian
+ = True ) :
+
+125 
+	=result
+ = 
+self
+ . 
+bus
+ . 
+	`read_word_data
+ ( 
+self
+ . 
+address
+ , 
+reg
+ )
+
+128 if not 
+little_endian
+ :
+
+129 
+	=result
+ = ( ( 
+result
+ << 8 ) & 0xFF00 ) + ( 
+result
+ >> 8 )
+
+130 if ( 
+self
+ . 
+debug
+ ) :
+
+131 print "I2C: Device 0x%02X returned 0x%04X from reg 0x%02X" % ( 
+self
+ . 
+address
+ , 
+result
+ & 0xFFFF , 
+reg
+ )
+
+132 return 
+result
+
+133 except 
+IOError
+ , 
+err
+ :
+
+134 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+136 def 
+	$readS16
+ ( 
+self
+ , 
+reg
+ , 
+little_endian
+ = True ) :
+
+139 
+	=result
+ = 
+self
+ . 
+	`readU16
+ ( 
+reg
+ , 
+little_endian
+ )
+
+140 if 
+result
+ > 32767 : 
+	=result
+ -= 65536
+
+141 return 
+result
+
+142 except 
+IOError
+ , 
+err
+ :
+
+143 return 
+self
+ . 
+	`errMsg
+ ( ) 
+	}
+
+145 if 
+__name__
+ == '__main__' :
+
+147 
+	=bus
+ = 
+	`Sunfounder_I2C
+ ( 
+address
+ = 0 )
+
+
+	@./server/Sunfounder_PWM_Servo_Driver/Sunfounder_PWM_Servo_Driver.py
+
+3 import 
+	~time
+
+4 import 
+	~math
+
+5 from 
+	~Sunfounder_I2C
+ import 
+Sunfounder_I2C
+
+11 class 
+	cPWM
+ :
+
+13 
+	=__MODE1
+ = 0x00
+
+14 
+	=__MODE2
+ = 0x01
+
+15 
+	=__SUBADR1
+ = 0x02
+
+16 
+	=__SUBADR2
+ = 0x03
+
+17 
+	=__SUBADR3
+ = 0x04
+
+18 
+	=__PRESCALE
+ = 0xFE
+
+19 
+	=__LED0_ON_L
+ = 0x06
+
+20 
+	=__LED0_ON_H
+ = 0x07
+
+21 
+	=__LED0_OFF_L
+ = 0x08
+
+22 
+	=__LED0_OFF_H
+ = 0x09
+
+23 
+	=__ALL_LED_ON_L
+ = 0xFA
+
+24 
+	=__ALL_LED_ON_H
+ = 0xFB
+
+25 
+	=__ALL_LED_OFF_L
+ = 0xFC
+
+26 
+	=__ALL_LED_OFF_H
+ = 0xFD
+
+29 
+	=__RESTART
+ = 0x80
+
+30 
+	=__SLEEP
+ = 0x10
+
+31 
+	=__ALLCALL
+ = 0x01
+
+32 
+	=__INVRT
+ = 0x10
+
+33 
+	=__OUTDRV
+ = 0x04
+
+35 
+	=general_call_i2c
+ = 
+	`Sunfounder_I2C
+ ( 0x00 )
+
+37 @ 
+classmethod
+
+38 def 
+	$softwareReset
+ ( 
+cls
+ ) :
+
+40 
+cls
+ . 
+general_call_i2c
+ . 
+	`writeRaw8
+ ( 0x06 ) 
+	}
+
+42 def 
+	$__init__
+ ( 
+self
+ , 
+address
+ = 0x40 , 
+debug
+ = False ) :
+
+43 
+self
+ . 
+	=i2c
+ = 
+	`Sunfounder_I2C
+ ( 
+address
+ )
+
+44 
+self
+ . 
+i2c
+ . 
+	=debug
+ = 
+debug
+
+45 
+self
+ . 
+	=address
+ = 
+address
+
+46 
+self
+ . 
+	=debug
+ = 
+debug
+
+47 if ( 
+self
+ . 
+debug
+ ) :
+
+49 
+self
+ . 
+	`setAllPWM
+ ( 0 , 0 )
+
+50 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__MODE2
+ , 
+self
+ . 
+__OUTDRV
+ )
+
+51 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__MODE1
+ , 
+self
+ . 
+__ALLCALL
+ )
+
+52 
+time
+ . 
+	`sleep
+ ( 0.005 )
+
+54 
+	=mode1
+ = 
+self
+ . 
+i2c
+ . 
+	`readU8
+ ( 
+self
+ . 
+__MODE1
+ )
+
+55 
+	=mode1
+ = 
+mode1
+ & ~ 
+self
+ . 
+__SLEEP
+
+56 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__MODE1
+ , 
+mode1
+ )
+
+57 
+time
+ . 
+	`sleep
+ ( 0.005 ) 
+	}
+
+59 def 
+	$setPWMFreq
+ ( 
+self
+ , 
+freq
+ ) :
+
+61 
+	=prescaleval
+ = 25000000.0
+
+62 
+	=prescaleval
+ /= 4096.0
+
+63 
+	=prescaleval
+ /= 
+	`float
+ ( 
+freq
+ )
+
+64 
+	=prescaleval
+ -= 1.0
+
+65 if ( 
+self
+ . 
+debug
+ ) :
+
+66 print "Setting PWM frequency to %d Hz" % 
+freq
+
+67 print "Estimated pre-scale: %d" % 
+prescaleval
+
+68 
+	=prescale
+ = 
+math
+ . 
+	`floor
+ ( 
+prescaleval
+ + 0.5 )
+
+69 if ( 
+self
+ . 
+debug
+ ) :
+
+70 print "Final pre-scale: %d" % 
+prescale
+
+72 
+	=oldmode
+ = 
+self
+ . 
+i2c
+ . 
+	`readU8
+ ( 
+self
+ . 
+__MODE1
+ ) ;
+
+73 
+	=newmode
+ = ( 
+oldmode
+ & 0x7F ) | 0x10
+
+74 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__MODE1
+ , 
+newmode
+ )
+
+75 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__PRESCALE
+ , 
+	`int
+ ( 
+math
+ . 
+	`floor
+ ( 
+prescale
+ ) ) )
+
+76 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__MODE1
+ , 
+oldmode
+ )
+
+77 
+time
+ . 
+	`sleep
+ ( 0.005 )
+
+78 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__MODE1
+ , 
+oldmode
+ | 0x80 ) 
+	}
+
+80 def 
+	$setPWM
+ ( 
+self
+ , 
+channel
+ , 
+on
+ , 
+off
+ ) :
+
+82 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__LED0_ON_L
+ + 4 * 
+channel
+ , 
+on
+ & 0xFF )
+
+83 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__LED0_ON_H
+ + 4 * 
+channel
+ , 
+on
+ >> 8 )
+
+84 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__LED0_OFF_L
+ + 4 * 
+channel
+ , 
+off
+ & 0xFF )
+
+85 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__LED0_OFF_H
+ + 4 * 
+channel
+ , 
+off
+ >> 8 ) 
+	}
+
+87 def 
+	$setAllPWM
+ ( 
+self
+ , 
+on
+ , 
+off
+ ) :
+
+89 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__ALL_LED_ON_L
+ , 
+on
+ & 0xFF )
+
+90 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__ALL_LED_ON_H
+ , 
+on
+ >> 8 )
+
+91 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__ALL_LED_OFF_L
+ , 
+off
+ & 0xFF )
+
+92 
+self
+ . 
+i2c
+ . 
+	`write8
+ ( 
+self
+ . 
+__ALL_LED_OFF_H
+ , 
+off
+ >> 8 ) 
+	}
+
+
+	@./server/tcp_server.py
+
+2 import 
+	~RPi.GPIO
+ as 
+GPIO
+
+3 import 
+	~video_dir
+
+4 import 
+	~car_dir
+
+5 import 
+	~motor
+
+6 from 
+	~socket
+ import *
+
+7 from 
+	~time
+ import 
+ctime
+
+9 
+	=ctrl_cmd
+ = [ 'forward' , 'backward' , 'left' , 'right' , 'stop' , 'read cpu_temp' , 'home' , 'distance' , 'x+' , 'x-' , 'y+' , 'y-' , 'xy_home' ]
+
+11 
+	=HOST
+ = ''
+
+12 
+	=PORT
+ = 21567
+
+13 
+	=BUFSIZ
+ = 1024
+
+14 
+	=ADDR
+ = ( 
+HOST
+ , 
+PORT
+ )
+
+16 
+	=tcpSerSock
+ = 
+	`socket
+ ( 
+AF_INET
+ , 
+SOCK_STREAM
+ )
+
+17 
+tcpSerSock
+ . 
+	`bind
+ ( 
+ADDR
+ )
+
+18 
+tcpSerSock
+ . 
+	`listen
+ ( 5 )
+
+21 
+video_dir
+ . 
+	`setup
+ ( )
+
+22 
+car_dir
+ . 
+	`setup
+ ( )
+
+23 
+motor
+ . 
+	`setup
+ ( )
+
+24 
+video_dir
+ . 
+	`home_x_y
+ ( )
+
+25 
+car_dir
+ . 
+	`home
+ ( )
+
+32 
+	=tcpCliSock
+ , 
+	=addr
+ = 
+tcpSerSock
+ . 
+	`accept
+ ( )
+
+33 print '...connected from :' , 
+addr
+
+36 
+	=data
+ = 
+tcpCliSock
+ . 
+	`recv
+ ( 
+BUFSIZ
+ )
+
+38 if not 
+data
+ :
+
+40 if 
+data
+ == 
+ctrl_cmd
+ [ 0 ] :
+
+42 
+motor
+ . 
+	`ctrl
+ ( 1 , 1 )
+
+43 elif 
+data
+ == 
+ctrl_cmd
+ [ 1 ] :
+
+45 
+motor
+ . 
+	`ctrl
+ ( 1 , - 1 )
+
+46 elif 
+data
+ == 
+ctrl_cmd
+ [ 2 ] :
+
+48 
+car_dir
+ . 
+	`turn_left
+ ( )
+
+49 elif 
+data
+ == 
+ctrl_cmd
+ [ 3 ] :
+
+51 
+car_dir
+ . 
+	`turn_right
+ ( )
+
+52 elif 
+data
+ == 
+ctrl_cmd
+ [ 6 ] :
+
+54 
+car_dir
+ . 
+	`home
+ ( )
+
+55 elif 
+data
+ == 
+ctrl_cmd
+ [ 4 ] :
+
+57 
+motor
+ . 
+	`ctrl
+ ( 0 )
+
+58 elif 
+data
+ == 
+ctrl_cmd
+ [ 5 ] :
+
+60 
+	=temp
+ = 
+cpu_temp
+ . 
+	`read
+ ( )
+
+61 
+tcpCliSock
+ . 
+	`send
+ ( '[%s] %0.2f' % ( 
+	`ctime
+ ( ) , 
+temp
+ ) )
+
+62 elif 
+data
+ == 
+ctrl_cmd
+ [ 8 ] :
+
+64 
+video_dir
+ . 
+	`move_increase_x
+ ( )
+
+65 elif 
+data
+ == 
+ctrl_cmd
+ [ 9 ] :
+
+67 
+video_dir
+ . 
+	`move_decrease_x
+ ( )
+
+68 elif 
+data
+ == 
+ctrl_cmd
+ [ 10 ] :
+
+70 
+video_dir
+ . 
+	`move_increase_y
+ ( )
+
+71 elif 
+data
+ == 
+ctrl_cmd
+ [ 11 ] :
+
+73 
+video_dir
+ . 
+	`move_decrease_y
+ ( )
+
+74 elif 
+data
+ == 
+ctrl_cmd
+ [ 12 ] :
+
+76 
+video_dir
+ . 
+	`home_x_y
+ ( )
+
+77 elif 
+data
+ [ 0 : 5 ] == 'speed' :
+
+78 print 
+data
+
+79 
+	=numLen
+ = 
+	`len
+ ( 
+data
+ ) - 
+	`len
+ ( 'speed' )
+
+80 if 
+numLen
+ == 1 or 
+numLen
+ == 2 or 
+numLen
+ == 3 :
+
+81 
+	=tmp
+ = 
+data
+ [ - 
+numLen
+ : ]
+
+82 print 'tmp(str) = %s' % 
+tmp
+
+83 
+	=spd
+ = 
+	`int
+ ( 
+tmp
+ )
+
+84 print 'spd(int) = %d' % 
+spd
+
+85 if 
+spd
+ < 24 :
+
+86 
+	=spd
+ = 24
+
+87 
+motor
+ . 
+	`setSpeed
+ ( 
+spd
+ )
+
+90 
+tcpSerSock
+ . 
+	`close
+ ( )
+
+
+	@./server/video_dir.py
+
+2 import 
+	~Sunfounder_PWM_Servo_Driver.Servo_init
+ as 
+servo
+
+3 import 
+	~time
+
+5 
+	=MinPulse
+ = 200
+
+6 
+	=MaxPulse
+ = 700
+
+8 
+	=Current_x
+ = 0
+
+9 
+	=Current_y
+ = 0
+
+11 def 
+	$setup
+ ( ) :
+
+12 global 
+	gXmin
+ , 
+	gYmin
+ , 
+	gXmax
+ , 
+	gYmax
+ , 
+	ghome_x
+ , 
+	ghome_y
+ , 
+	gpwm
+
+13 
+	=offset_x
+ = 0
+
+14 
+	=offset_y
+ = 0
+
+16 for 
+line
+ in 
+	`open
+ ( 'config' ) :
+
+17 if 
+line
+ [ 0 : 8 ] == 'offset_x' :
+
+18 
+	=offset_x
+ = 
+	`int
+ ( 
+line
+ [ 11 : - 1 ] )
+
+20 if 
+line
+ [ 0 : 8 ] == 'offset_y' :
+
+21 
+	=offset_y
+ = 
+	`int
+ ( 
+line
+ [ 11 : - 1 ] )
+
+25 
+	=Xmin
+ = 
+MinPulse
+ + 
+offset_x
+
+26 
+	=Xmax
+ = 
+MaxPulse
+ + 
+offset_x
+
+27 
+	=Ymin
+ = 
+MinPulse
+ + 
+offset_y
+
+28 
+	=Ymax
+ = 
+MaxPulse
+ + 
+offset_y
+
+29 
+	=home_x
+ = ( 
+Xmax
+ + 
+Xmin
+ ) / 2
+
+30 
+	=home_y
+ = 
+Ymin
+ + 80
+
+31 
+	=pwm
+ = 
+servo
+ . 
+	`init
+ ( ) 
+	}
+
+37 def 
+	$move_decrease_x
+ ( ) :
+
+38 global 
+	gCurrent_x
+
+39 
+	=Current_x
+ += 25
+
+40 if 
+Current_x
+ > 
+Xmax
+ :
+
+41 
+	=Current_x
+ = 
+Xmax
+
+42 
+pwm
+ . 
+	`setPWM
+ ( 14 , 0 , 
+Current_x
+ ) 
+	}
+
+47 def 
+	$move_increase_x
+ ( ) :
+
+48 global 
+	gCurrent_x
+
+49 
+	=Current_x
+ -= 25
+
+50 if 
+Current_x
+ <= 
+Xmin
+ :
+
+51 
+	=Current_x
+ = 
+Xmin
+
+52 
+pwm
+ . 
+	`setPWM
+ ( 14 , 0 , 
+Current_x
+ ) 
+	}
+
+57 def 
+	$move_increase_y
+ ( ) :
+
+58 global 
+	gCurrent_y
+
+59 
+	=Current_y
+ += 25
+
+60 if 
+Current_y
+ > 
+Ymax
+ :
+
+61 
+	=Current_y
+ = 
+Ymax
+
+62 
+pwm
+ . 
+	`setPWM
+ ( 15 , 0 , 
+Current_y
+ ) 
+	}
+
+67 def 
+	$move_decrease_y
+ ( ) :
+
+68 global 
+	gCurrent_y
+
+69 
+	=Current_y
+ -= 25
+
+70 if 
+Current_y
+ <= 
+Ymin
+ :
+
+71 
+	=Current_y
+ = 
+Ymin
+
+72 
+pwm
+ . 
+	`setPWM
+ ( 15 , 0 , 
+Current_y
+ ) 
+	}
+
+77 def 
+	$home_x_y
+ ( ) :
+
+78 global 
+	gCurrent_y
+
+79 global 
+	gCurrent_x
+
+80 
+	=Current_y
+ = 
+home_y
+
+81 
+	=Current_x
+ = 
+home_x
+
+82 
+pwm
+ . 
+	`setPWM
+ ( 14 , 0 , 
+Current_x
+ )
+
+83 
+pwm
+ . 
+	`setPWM
+ ( 15 , 0 , 
+Current_y
+ ) 
+	}
+
+85 def 
+	$calibrate
+ ( 
+x
+ , 
+y
+ ) :
+
+86 
+pwm
+ . 
+	`setPWM
+ ( 14 , 0 , ( 
+MaxPulse
+ + 
+MinPulse
+ ) / 2 + 
+x
+ )
+
+87 
+pwm
+ . 
+	`setPWM
+ ( 15 , 0 , ( 
+MaxPulse
+ + 
+MinPulse
+ ) / 2 + 
+y
+ ) 
+	}
+
+89 def 
+	$test
+ ( ) :
+
+91 
+	`home_x_y
+ ( )
+
+92 
+time
+ . 
+	`sleep
+ ( 0.5 )
+
+93 for 
+i
+ in 
+	`range
+ ( 0 , 9 ) :
+
+94 
+	`move_increase_x
+ ( )
+
+95 
+	`move_increase_y
+ ( )
+
+96 
+time
+ . 
+	`sleep
+ ( 0.5 )
+
+97 for 
+i
+ in 
+	`range
+ ( 0 , 9 ) :
+
+98 
+	`move_decrease_x
+ ( )
+
+99 
+	`move_decrease_y
+ ( )
+
+100 
+time
+ . 
+	`sleep
+ ( 0.5 ) 
+	}
+
+102 if 
+__name__
+ == '__main__' :
+
+103 
+	`setup
+ ( )
+
+104 
+	`home_x_y
+ ( )
+
+
+	@
+1
+.
+0
+14
+509
+./client/cali_client.py
+./client/client_App.py
+./server/cali_server.py
+./server/car_dir.py
+./server/motor.py
+./server/Sunfounder_I2C/__init__.py
+./server/Sunfounder_I2C/Sunfounder_I2C.py
+./server/Sunfounder_PWM_Servo_Driver/__init__.py
+./server/Sunfounder_PWM_Servo_Driver/Servo_Example.py
+./server/Sunfounder_PWM_Servo_Driver/Servo_init.py
+./server/Sunfounder_PWM_Servo_Driver/Sunfounder_I2C.py
+./server/Sunfounder_PWM_Servo_Driver/Sunfounder_PWM_Servo_Driver.py
+./server/tcp_server.py
+./server/video_dir.py

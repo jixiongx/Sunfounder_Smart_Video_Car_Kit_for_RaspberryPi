@@ -1,0 +1,633 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"co",
+				"copy_list1"
+			],
+			[
+				"cop",
+				"copy_list2"
+			],
+			[
+				"le",
+				"letterCombinations"
+			],
+			[
+				"so",
+				"slopPointsMap"
+			],
+			[
+				"ma",
+				"maxPoints"
+			],
+			[
+				"same",
+				"samePoints"
+			],
+			[
+				"lo",
+				"longestPalindrome"
+			],
+			[
+				"re",
+				"removeNode"
+			],
+			[
+				"wor",
+				"wordList"
+			],
+			[
+				"path",
+				"path_r"
+			],
+			[
+				"min",
+				"minWindow"
+			],
+			[
+				"cur",
+				"cur_jump_max"
+			],
+			[
+				"last",
+				"last_jump_max"
+			],
+			[
+				"cou",
+				"countAndSay"
+			],
+			[
+				"candy",
+				"candy_box"
+			],
+			[
+				"is",
+				"isValidSudoku"
+			],
+			[
+				"len",
+				"lengthOfLongestSubstring"
+			],
+			[
+				"print",
+				"printlist"
+			],
+			[
+				"count",
+				"countIslands"
+			],
+			[
+				"col",
+				"coloffset"
+			],
+			[
+				"row",
+				"rowoffset"
+			],
+			[
+				"k",
+				"k_string"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "client/client_App.py",
+			"settings":
+			{
+				"buffer_size": 6363,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "In folder /Users/jixiongxiao/Documents/projects/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi\nFound 3 matches for C symbol: forward_fun\n--------------------------------------------------\n\n\n./client/client_App.py:\n   107 [scope: <global>] Btn0 . bind ( '<ButtonPress-1>' , forward_fun )\n    ..\n   158 [scope: <global>] top . bind ( '<KeyPress-w>' , forward_fun )\n    ..\n    23 [scope: forward_fun] def forward_fun ( event ) :",
+			"settings":
+			{
+				"buffer_size": 425,
+				"line_ending": "Unix",
+				"name": "Cscope results - forward_fun",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"contents": "In folder /Users/jixiongxiao/Documents/projects/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi\nFound 3 matches for C symbol: forward_fun\n--------------------------------------------------\n\n\n./client/client_App.py:\n   107 [scope: <global>] Btn0 . bind ( '<ButtonPress-1>' , forward_fun )\n    ..\n   158 [scope: <global>] top . bind ( '<KeyPress-w>' , forward_fun )\n    ..\n    23 [scope: forward_fun] def forward_fun ( event ) :",
+			"settings":
+			{
+				"buffer_size": 425,
+				"line_ending": "Unix",
+				"name": "Cscope results - forward_fun",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"file": "/Users/jixiongxiao/Library/Application Support/Sublime Text 3/Packages/User/CscopeSublime.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 1251,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "In folder /Users/jixiongxiao/Documents/projects/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi\nFound 0 matches for functions calling this function: forward_fun\n--------------------------------------------------\n\n",
+			"settings":
+			{
+				"buffer_size": 212,
+				"line_ending": "Unix",
+				"name": "Cscope results - forward_fun",
+				"read_only": true,
+				"scratch": true
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"g++ hw.cpp",
+			"gcc hw.cpp",
+			"g++ hw.cpp",
+			"g++ hw.cpp ",
+			"g++ hw.cpp -o haha",
+			"sublime.version()",
+			"g++ hw.cpp -o haha",
+			"g++",
+			"gcc",
+			"ls"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/jixiongxiao/Documents/projects/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi"
+	],
+	"file_history":
+	[
+		"/Users/jixiongxiao/Documents/leetcode_fb/leetcode_fb.sublime-project",
+		"/Users/jixiongxiao/Documents/sublime3Tips/projectTips.txt",
+		"/Users/jixiongxiao/Documents/leetcode_fb/112.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/179.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/map.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/8.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/48.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/56.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/189.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/54.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/250.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/41.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/29.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/279.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/204.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/73.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/341.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/236.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/74.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/33.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/222.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/2.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/27.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/83.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/3.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/162.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/9.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/28.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/206.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/21.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/24.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/7_Reverse_Integer.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/14_max_prefix.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/98.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/22.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/15.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/79.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/131.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/46.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/78.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/47.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/127.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/378.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/13.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/155.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/191.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/11.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/148.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/325.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/168.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/404.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/257.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/67.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/252.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/374.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/350.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/268.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/171.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/202.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/326.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/198.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/118.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/234.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/152.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/111.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/190.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/36.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/254.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/133.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/39.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/216.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/200.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/349.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/51.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/338.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/256.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/62.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/276.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/23.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/146.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/5.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/38.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/42.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/328.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/50.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/139.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/149.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/17.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/49.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/384.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/77.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/150.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/134.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/76.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/86.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/19.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/75.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/game.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/298.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/238.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/138.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/94.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/144.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/156.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/102.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/128.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/458.py",
+		"/Users/jixiongxiao/Documents/cc/11.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/53.py",
+		"/Users/jixiongxiao/Documents/leetcode_fb/108.py",
+		"/Users/jixiongxiao/Documents/cc/77.py",
+		"/Users/jixiongxiao/Documents/cc/8.py",
+		"/Users/jixiongxiao/Documents/cc/54.py",
+		"/Users/jixiongxiao/Documents/cc/389.py",
+		"/Users/jixiongxiao/Documents/cc/basic_questions.txt",
+		"/Users/jixiongxiao/Documents/cc/285.py",
+		"/Users/jixiongxiao/Documents/cc/island.py",
+		"/Users/jixiongxiao/Documents/cc/find_islands.py",
+		"/Users/jixiongxiao/Documents/cc/42.py",
+		"/Users/jixiongxiao/Documents/cc/360.py",
+		"/Users/jixiongxiao/Documents/cc/347_heap.py",
+		"/Users/jixiongxiao/Documents/cc/347.py",
+		"/Users/jixiongxiao/Documents/cc/91.py",
+		"/Users/jixiongxiao/Documents/cc/71.py",
+		"/Users/jixiongxiao/Documents/cc/346.py",
+		"/Users/jixiongxiao/Documents/cc/46.py",
+		"/Users/jixiongxiao/Documents/cc/33.py",
+		"/Users/jixiongxiao/Documents/cc/76.py"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"maxWater",
+			"right",
+			"righ",
+			"right",
+			"curWater",
+			"left",
+			"maxWater",
+			"right",
+			"left",
+			"while",
+			"root",
+			"\"##############\"\n",
+			"Sudoku",
+			"mind",
+			"i",
+			"print",
+			"[1, 2]",
+			":\n",
+			"[3]",
+			"next",
+			"old_tail",
+			"print",
+			"[1, 1, 1]",
+			"***"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "client/client_App.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6363,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3086,
+								3086
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1350.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 425,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								250,
+								250
+							]
+						],
+						"settings":
+						{
+							"default_dir": "/Users/jixiongxiao/Documents/projects/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi",
+							"syntax": "Packages/Cscope/Lookup Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 425,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								406,
+								406
+							]
+						],
+						"settings":
+						{
+							"default_dir": "/Users/jixiongxiao/Documents/projects/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi",
+							"syntax": "Packages/Cscope/Lookup Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Users/jixiongxiao/Library/Application Support/Sublime Text 3/Packages/User/CscopeSublime.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1251,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1193,
+								1193
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 212,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								212,
+								212
+							]
+						],
+						"settings":
+						{
+							"default_dir": "/Users/jixiongxiao/Documents/projects/Sunfounder_Smart_Video_Car_Kit_for_RaspberryPi",
+							"syntax": "Packages/Cscope/Lookup Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "smartCar.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"11",
+				"11.py"
+			],
+			[
+				"108",
+				"108.py"
+			],
+			[
+				"102",
+				"102.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/Documents/leetcode_fb/leetcode_fb.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "left",
+		"selected_items":
+		[
+			[
+				"left",
+				"longestCommonPrefix"
+			]
+		],
+		"width": 392.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
